@@ -19,6 +19,12 @@ class SEPHI:
     
     def get_relative_radius(self):
         return self.planet_radius / constants.EARTH_RADIUS
+    
+    def get_planet_surface_gravity(self):
+        return constants.GRAVITATIONAL_CONSTANT * self.planet_mass / self.planet_radius**2
+    
+    def get_relative_gravity(self):
+        return self.get_planet_surface_gravity() / constants.EARTH_GRAVITY
 
     def calculate_L1(self):
         relative_mass = self.get_relative_mass()
@@ -33,6 +39,17 @@ class SEPHI:
             return 0
         else:
             return math.exp(-0.5 * ((relative_radius - mu1)/sigma1)**2)
+
+    def calculate_L2(self):
+        g_relative = self.get_relative_gravity()
+        r_relative = self.get_relative_radius()
+        escape_velocity_relative = math.sqrt(2 * g_relative * r_relative)
+        sigma_21 = 1/3
+        sigma_22 = (8.66 - 1) / 3
+        if escape_velocity_relative < 1:
+            return math.exp(-0.5 * ((escape_velocity_relative - 1)/sigma_21) ** 2)
+        else:
+            return math.exp(-0.5 * ((escape_velocity_relative - 1)/sigma_22) ** 2)
 
     def calculate_L4(self):
         density = self.get_relative_mass() / ((4 / 3 * math.pi) * (self.planet_radius ** 3))
