@@ -17,7 +17,7 @@ class SEPHI:
 
     
     def get_relative_mass(self):
-        return self.planet_mass / constants.EARTH_MASS, 
+        return self.planet_mass / constants.EARTH_MASS
     
     def get_relative_radius(self):
         return self.planet_radius / constants.EARTH_RADIUS
@@ -81,7 +81,7 @@ class SEPHI:
     def calculate_L4(self):
         density = self.get_relative_mass() / ((4 / 3 * math.pi) * (self.get_relative_radius ** 3))
         density = density ** (1/2)
-        mag_radius = self.get_relative_radius ** (7 / 2)
+        mag_radius = self.get_relative_radius() ** (7 / 2)
         mag_field = density * mag_radius * self.get_angular_frequency()
         return mag_field
       
