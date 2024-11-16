@@ -4,7 +4,7 @@ import math
 
 
 class SEPHI:
-    def __init__(self, planet_mass, planet_radius, stellar_mass, stellar_radius, stellar_effective_temperature, planetary_system_age, angular_frequency) -> None:
+    def __init__(self, planet_mass, planet_radius, stellar_mass, stellar_radius, stellar_effective_temperature, planetary_system_age, angular_frequency, stellar_luminosity, stellar_flux) -> None:
         self.planet_mass = planet_mass
         self.planet_radius = planet_radius
         self. stellar_mass = stellar_mass
@@ -12,10 +12,12 @@ class SEPHI:
         self.stellar_effective_temperature = stellar_effective_temperature
         self.planetary_system_age = planetary_system_age
         self.angular_frequency = angular_frequency
+        self.stellar_luminosity = stellar_luminosity
+        self.stellar_fuux = stellar_flux
 
     
     def get_relative_mass(self):
-        return self.planet_mass / constants.EARTH_MASS
+        return self.planet_mass / constants.EARTH_MASS, 
     
     def get_relative_radius(self):
         return self.planet_radius / constants.EARTH_RADIUS
@@ -35,8 +37,29 @@ class SEPHI:
             return math.exp(-0.5 * ((relative_radius - mu1)/sigma1)**2)
 
     def calculate_L4(self):
-        density = self.get_relative_mass() / ((4 / 3 * math.pi) * (self.planet_radius ** 3))
+        density = self.get_relative_mass() / ((4 / 3 * math.pi) * (self.get_relative_radius ** 3))
         density = density ** (1/2)
-        mag_radius = self.planet_radius ** (7 / 2)
+        mag_radius = self.get_relative_radius ** (7 / 2)
         mag_field = density * mag_radius * self.angular_frequency
         return mag_field
+
+    def calculate_L3(self):
+        hz_distance = math.sqrt(self.stellar_luminosity / self.stellar_flux)
+
+        if hz_distance < .51:
+            return 0
+        elif hz_distance >= .51 and hz_distance < .95:
+            mu = .95
+            sigma = (.95 - .51) / 3
+
+            return math.exp(-0.5 * ((hz_distance - mu) / sigma) ** 2)
+        
+        elif hz_distance >= .95 and hz_distance <= 1.68:
+            return 1;
+
+        else:
+            mu = 1.68
+            sigma = (2.4 - 1.68) / 3
+
+            return math.exp(-0.5 * ((hz_distance - mu) / sigma) ** 2)
+        
