@@ -1,10 +1,17 @@
 import constants
 import math
+from enum import Enum
 
 # TODO: Add docstrings to the class and its methods
 
+class PlanetType(Enum):
+    ROCKY = 1
+    ICY = 2
+    ICE_GIANT = 3
+    GAS_GIANT = 4
+
 class SEPHI:
-    def __init__(self, planet_mass, planet_radius, stellar_mass, stellar_radius, stellar_effective_temperature, planetary_system_age, orbital_period, stellar_luminosity, stellar_flux) -> None:
+    def __init__(self, planet_mass, planet_radius, stellar_mass, stellar_radius, stellar_effective_temperature, planetary_system_age, orbital_period, stellar_luminosity, stellar_flux, planet_type : PlanetType) -> None:
         self.planet_mass = planet_mass
         self.planet_radius = planet_radius
         self. stellar_mass = stellar_mass
@@ -14,6 +21,7 @@ class SEPHI:
         self.orbital_period = orbital_period
         self.stellar_luminosity = stellar_luminosity
         self.stellar_fuux = stellar_flux
+        self.planet_type = planet_type
 
     
     def get_relative_mass(self):
@@ -84,7 +92,7 @@ class SEPHI:
         mag_radius = self.get_relative_radius ** (7 / 2)
         mag_field = density * mag_radius * self.get_angular_frequency()
         return mag_field
-      
+
     def calculate_sephi(self):
         L1 = self.calculate_L1()
         L2 = self.calculate_L2()
@@ -92,5 +100,3 @@ class SEPHI:
         L4 = self.calculate_L4()
 
         return (L1 * L2 * L3 * L4) ** (1/4)
-    
-    
