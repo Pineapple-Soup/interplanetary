@@ -7,13 +7,13 @@ class SEPHI:
     def __init__(self, planet_mass, planet_radius, stellar_mass, stellar_radius, stellar_effective_temperature, planetary_system_age, orbital_period, stellar_luminosity, stellar_flux) -> None:
         self.planet_mass = planet_mass
         self.planet_radius = planet_radius
-        self. stellar_mass = stellar_mass
+        self.stellar_mass = stellar_mass
         self.stellar_radius = stellar_radius
         self.stellar_effective_temperature = stellar_effective_temperature
         self.planetary_system_age = planetary_system_age
         self.orbital_period = orbital_period
         self.stellar_luminosity = stellar_luminosity
-        self.stellar_fuux = stellar_flux
+        self.stellar_flux = stellar_flux 
 
     
     def get_relative_mass(self):
