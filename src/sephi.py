@@ -1,7 +1,7 @@
 import constants
 import math
 
-
+# TODO: Add docstrings to the class and its methods
 
 class SEPHI:
     def __init__(self, planet_mass, planet_radius, stellar_mass, stellar_radius, stellar_effective_temperature, planetary_system_age, angular_frequency, stellar_luminosity, stellar_flux) -> None:
@@ -81,4 +81,12 @@ class SEPHI:
         mag_field = density * mag_radius * self.angular_frequency
         return mag_field
       
+    def calculate_sephi(self):
+        L1 = self.calculate_L1()
+        L2 = self.calculate_L2()
+        L3 = self.calculate_L3()
+        L4 = self.calculate_L4()
+
+        return (L1 * L2 * L3 * L4) ** (1/4)
+    
     
