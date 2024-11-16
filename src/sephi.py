@@ -15,18 +15,17 @@ class SEPHI:
         self.stellar_luminosity = stellar_luminosity
         self.stellar_fuux = stellar_flux
 
+    def get_relative_mass(absolute_mass):
+        return absolute_mass / constants.EARTH_MASS
     
-    def get_relative_mass(self):
-        return self.planet_mass / constants.EARTH_MASS, 
+    def get_relative_radius(absolute_radius):
+        return absolute_radius / constants.EARTH_RADIUS
     
-    def get_relative_radius(self):
-        return self.planet_radius / constants.EARTH_RADIUS
+    def get_planet_surface_gravity(absolute_mass, absolute_radius):
+        return constants.GRAVITATIONAL_CONSTANT * absolute_mass / (absolute_radius**2)
     
-    def get_planet_surface_gravity(self):
-        return constants.GRAVITATIONAL_CONSTANT * self.planet_mass / self.planet_radius**2
-    
-    def get_relative_gravity(self):
-        return self.get_planet_surface_gravity() / constants.EARTH_GRAVITY
+    def get_relative_gravity(surface_gravity):
+        return surface_gravity / constants.EARTH_GRAVITY
 
     def calculate_L1(self):
         relative_mass = self.get_relative_mass()
@@ -80,5 +79,3 @@ class SEPHI:
         mag_radius = self.get_relative_radius ** (7 / 2)
         mag_field = density * mag_radius * self.angular_frequency
         return mag_field
-      
-    
