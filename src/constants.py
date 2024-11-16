@@ -1,0 +1,4 @@
+EARTH_MASS = 5.972e24  # kg
+EARTH_RADIUS = 6.371e6  # m
+ENSTATITE_DENSITY = 3.2e3  # kg/m^3
+WATER_DENSITY = 1e3  # kg/m^3
