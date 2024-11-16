@@ -30,6 +30,9 @@ class SEPHI:
     def get_relative_radius(self):
         return self.planet_radius / constants.EARTH_RADIUS
     
+    def get_relative_luminosity(self):
+        return self.stellar_luminosity / constants.SOLAR_LUMINOSITY
+    
     def get_planet_surface_gravity(self):
         return constants.GRAVITATIONAL_CONSTANT * self.planet_mass / self.planet_radius**2
     
