@@ -20,7 +20,7 @@ const Slider = ({ min, max, step, onChange }) => {
                 onChange={handleChange}
                 className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
                 style={{
-                      background: `linear-gradient(to right, #4a5568 ${value}%, #2d3748 ${value}%)`
+                      background: `linear-gradient(to right, #4a5568 ${(value - min) / (max - min) * 100}%, #2d3748 ${(value - min) / (max - min) * 100}%)`
                 }}
             />
             <div className="text-center mt-2">
