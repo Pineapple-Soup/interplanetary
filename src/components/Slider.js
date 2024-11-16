@@ -19,9 +19,12 @@ const Slider = ({ min, max, step, onChange }) => {
                 value={value}
                 onChange={handleChange}
                 className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                style={{
+                      background: `linear-gradient(to right, #4a5568 ${value}%, #2d3748 ${value}%)`
+                }}
             />
             <div className="text-center mt-2">
-                <span className="text-lg font-medium">{value}</span>
+                <span className="text-lg font-medium text-secondary">{value}</span>
             </div>
         </div>
     );

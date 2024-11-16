@@ -1,3 +1,5 @@
+
+
 export const planetParams = [
     {
         id: 1,
@@ -5,7 +7,8 @@ export const planetParams = [
         state: 'pMass',
         min: 0,
         max: 100,
-        step: 1
+        step: 1,
+        info: "This is the mass of the planet in Earth masses."
     },
     {
         id: 2,
@@ -13,7 +16,8 @@ export const planetParams = [
         state: 'pRadius',
         min: 0,
         max: 100,
-        step: 1
+        step: 1,
+        info : "This is the radius of the planet in Earth radii."
     },
     {
         id: 3,
@@ -21,7 +25,8 @@ export const planetParams = [
         state: 'pPeriod',
         min: 0,
         max: 100,
-        step: 1
+        step: 1,
+        info: "This is the orbital period of the planet in Earth days."
     },
     { 
         id: 4,
@@ -29,7 +34,8 @@ export const planetParams = [
         state: 'sMass',
         min: 0,
         max: 100,
-        step: 1
+        step: 1,
+        info: "This is the mass of the star in Solar masses."
     },
     {
         id: 5,
@@ -37,7 +43,8 @@ export const planetParams = [
         state: 'sRadius',
         min: 0,
         max: 100,
-        step: 1
+        step: 1,
+        info: "This is the radius of the star in Solar radii."
     },
     {
         id: 6,
@@ -45,7 +52,8 @@ export const planetParams = [
         state: 'sTemp',
         min: 0,
         max: 100,
-        step: 1
+        step: 1,
+        info: "This is the effective temperature of the star in Kelvin."
     },
     {
         id: 7,
@@ -53,7 +61,8 @@ export const planetParams = [
         state: 'psAge',
         min: 0,
         max: 100,
-        step: 1
+        step: 1,
+        info: "This is the age of the planetary system in gigayears."
     },
     {
         id: 8,
@@ -61,7 +70,8 @@ export const planetParams = [
         state: 'sLuminosity',
         min: 0,
         max: 100,
-        step: 1
+        step: 1,
+        info: "This is the luminosity of the star in Solar luminosities."
     },
     {
         id: 9,
@@ -69,6 +79,7 @@ export const planetParams = [
         state: 'sFlux',
         min: 0,
         max: 100,
-        step: 1
+        step: 1,
+        info: "This is the flux of the star in Solar flux units."
     }
 ]

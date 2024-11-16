@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import Slider from '../components/Slider';
-import { planetParams } from '../data/sliders';
+import { planetParams } from '../data/planetParameters';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+
 
 const LandingPage = () => {
-    const [planetSize, setPlanetSize] = useState(50);
-    const [planetColor, setPlanetColor] = useState(50);
     const [pMass, setPMass] = useState(50);
     const [pRadius, setPRadius] = useState(50);
     const [pPeriod, setPPeriod] = useState(50);
@@ -14,6 +15,8 @@ const LandingPage = () => {
     const [psAge, setPsAge] = useState(50);
     const [sLuminosity, setSLuminosity] = useState(50);
     const [sFlux, setSFlux] = useState(50);
+
+    const [infoPopup, setInfoPopup] = useState(null);
 
 
     const stateSetters = {
@@ -29,31 +32,63 @@ const LandingPage = () => {
     };
 
 
+    const handleInfoClick = (info) => {
+        setInfoPopup(info);
+    };
+
+    const closePopup = () => {
+        setInfoPopup(null);
+    };
+
+
     return (
-        <div className="flex">
-            <div className="w-1/4 p-4 border">
-                <h2 className="text-xl font-bold mb-4">Build Your Planet</h2>
+        <div className="flex bg-primary p-8 rounded-lg shadow-lg">
+            <div className="w-1/4 p-4 border border-highlight rounded-lg bg-tertiary">
+                <h2 className="text-xl font-bold mb-4 text-secondary">Build Your Planet</h2>
                 {planetParams.map(slider => {
                     return <div key={slider.id} className="mb-4">
-                        <label className="block text-sm font-medium text-gray-700">{slider.label}</label>
+                        <div className="block text-sm font-medium text-secondary">
+                            {slider.label}
+                            <FontAwesomeIcon
+                                    icon={faInfoCircle}
+                                    className="ml-2 text-highlight cursor-pointer"
+                                    onClick={() => handleInfoClick(slider.info)}
+                                />
+                        </div>
                         <Slider min={slider.min} max={slider.max} step={slider.step} onChange={stateSetters[slider.state]} />
                     </div>
                 })}
-
             </div>
             <div className="w-3/4 p-4">
                 {/* Planet building canvas */}
             </div>
-            <div className="w-1/4 p-4 border overflow-y-auto h-screen">
+            <div className="w-1/4 p-4 border border-highlight rounded-lg bg-tertiary overflow-y-auto h-screen">
                 <div className="text-center">
-                    <h2 className="text-xl font-bold mb-4">Planet Stats</h2>
+                    <h2 className="text-xl text-secondary font-bold mb-4">Planet Stats</h2>
                     <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-700">Planet Mass</label>
-                        <span>{pMass}</span>
-                    </div>
+                        <div className="block text-sm font-medium text-secondary text-left">
+                            {planetParams.map(p => {
+                                return <p key={p.id}>{p.label}: {eval(p.state)}</p>
+                            })}
 
+                        </div>
+                    </div>
                 </div>
             </div>
+            {infoPopup && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                    <div className="bg-white p-4 rounded-lg shadow-lg max-w-sm w-full">
+                        <h3 className="text-lg font-bold mb-2">Parameter Info</h3>
+                        <p>{infoPopup}</p>
+                        <button
+                            className="mt-4 bg-primary text-white px-4 py-2 rounded"
+                            onClick={closePopup}
+                        >
+                            Close
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
