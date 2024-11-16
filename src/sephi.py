@@ -4,14 +4,14 @@ import math
 # TODO: Add docstrings to the class and its methods
 
 class SEPHI:
-    def __init__(self, planet_mass, planet_radius, stellar_mass, stellar_radius, stellar_effective_temperature, planetary_system_age, angular_frequency, stellar_luminosity, stellar_flux) -> None:
+    def __init__(self, planet_mass, planet_radius, stellar_mass, stellar_radius, stellar_effective_temperature, planetary_system_age, orbital_period, stellar_luminosity, stellar_flux) -> None:
         self.planet_mass = planet_mass
         self.planet_radius = planet_radius
         self. stellar_mass = stellar_mass
         self.stellar_radius = stellar_radius
         self.stellar_effective_temperature = stellar_effective_temperature
         self.planetary_system_age = planetary_system_age
-        self.angular_frequency = angular_frequency
+        self.orbital_period = orbital_period
         self.stellar_luminosity = stellar_luminosity
         self.stellar_fuux = stellar_flux
 
@@ -27,6 +27,10 @@ class SEPHI:
     
     def get_relative_gravity(self):
         return self.get_planet_surface_gravity() / constants.EARTH_GRAVITY
+    
+    def get_angular_frequency(self):
+        return 2 * math.pi / self.orbital_period
+
 
     def calculate_L1(self):
         relative_mass = self.get_relative_mass()
@@ -78,7 +82,7 @@ class SEPHI:
         density = self.get_relative_mass() / ((4 / 3 * math.pi) * (self.get_relative_radius ** 3))
         density = density ** (1/2)
         mag_radius = self.get_relative_radius ** (7 / 2)
-        mag_field = density * mag_radius * self.angular_frequency
+        mag_field = density * mag_radius * self.get_angular_frequency()
         return mag_field
       
     def calculate_sephi(self):
