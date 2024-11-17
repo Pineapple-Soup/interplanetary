@@ -5,7 +5,7 @@ from enum import Enum
 # TODO: Add docstrings to the class and its methods
 
 class PlanetType(Enum):
-    ROCKY = 1
+    ROCKY = 1   
     ICY = 2
     ICE_GIANT = 3
     GAS_GIANT = 4
@@ -17,7 +17,7 @@ class EffectiveTemperature(Enum):
     F = 7200
 
 class SEPHI:
-    def __init__(self, planet_mass, planet_radius, stellar_mass, stellar_radius, stellar_effective_temperature, planetary_system_age, orbital_period, stellar_luminosity, stellar_flux, planet_type) -> None:
+    def __init__(self, planet_mass, planet_radius, stellar_mass, stellar_radius, stellar_effective_temperature, planetary_system_age, orbital_period, stellar_luminosity, planet_type) -> None:
         self.planet_mass = planet_mass
         self.planet_radius = planet_radius
         self.stellar_mass = stellar_mass #unused
@@ -31,13 +31,10 @@ class SEPHI:
 
     
     def get_relative_mass(self):
-        return self.planet_mass / constants.EARTH_MASS
+        return self.planet_mass / constants.EARTH_MASS 
     
     def get_relative_radius(self):
         return self.planet_radius / constants.EARTH_RADIUS
-    
-    def get_relative_luminosity(self):
-        return self.stellar_luminosity / constants.SOLAR_LUMINOSITY
     
     def get_planet_surface_gravity(self):
         return constants.GRAVITATIONAL_CONSTANT * self.planet_mass / self.planet_radius**2
@@ -63,15 +60,21 @@ class SEPHI:
     def calculate_L1(self):
         relative_mass = self.get_relative_mass()
         relative_radius = self.get_relative_radius()
-        mu1 = math.cbrt(3 * relative_mass)/(constants.ENSTATITE_DENSITY * math.pi * 4)
-        half_density = 0.5 * constants.WATER_DENSITY + 0.5 * constants.ENSTATITE_DENSITY
-        mu2 = math.cbrt(3 * relative_mass)/(half_density * math.pi * 4)
+        mu1 = math.cbrt((3 * self.planet_mass)/(constants.ENSTATITE_DENSITY * math.pi * 4))
+        half_density = 0.5 * (constants.WATER_DENSITY +constants.ENSTATITE_DENSITY)
+        mu2 = math.cbrt((3 * self.planet_mass)/(half_density * math.pi * 4))
         sigma1 = (mu2 - mu1) / 3
-        if relative_mass <= mu1:
+        print("mu1: ", mu1)
+        if relative_radius <= mu1:
+            print("returning 1")
             return 1
-        elif mu2 <= relative_mass:
+        elif mu2 <= relative_radius:
+            print("mu2: ", mu2)
+            print ("relative_radius: ", self.planet_radius)
+            print("returning 0")
             return 0
         else:
+            print("this is corrct please be here")
             return math.exp(-0.5 * ((relative_radius - mu1)/sigma1)**2)
 
     def calculate_L2(self):
@@ -136,4 +139,28 @@ class SEPHI:
         L3 = self.calculate_L3()
         L4 = self.calculate_L4()
 
-        return (L1 * L2 * L3 * L4) ** (1/4)
+        print("L1: ", L1)
+        print("L2: ", L2)
+        print("L3: ", L3)
+        print("L4: ", L4)
+
+        print("L1 * L2 * L3 * L4: ", L1 * L2 * L3 * L4)
+        return L1 * L2 * L3 * L4
+
+def __main__():
+    earth_sephi = SEPHI(
+    planet_mass= 5.972e24,
+    planet_radius= 6371e3,
+    stellar_mass=1.989e30,
+    stellar_radius=6.957e8,
+    stellar_effective_temperature= 5778,
+    planetary_system_age=4.5e9,
+    orbital_period=365.25,  # Earth's orbital period
+    stellar_luminosity= 3.828e26,
+    planet_type="ROCKY"  # Earth is a rocky planet
+    )
+
+    print("earth:", earth_sephi.calculate_sephi())
+
+if __name__ == "__main__":
+    __main__()
