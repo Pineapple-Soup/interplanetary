@@ -1,0 +1,10 @@
+{
+    "planet_mass": 5.972e24,
+    "planet_radius": 6371e3,
+    "stellar_mass": 1.989e30,
+    "stellar_radius": 6.957e8,
+    "stellar_effective_temperature": 5778,
+    "planetary_system_age": 4.5e9,
+    "orbital_period": 365.25,
+    "stellar_luminosity": 3.828e26
+}
