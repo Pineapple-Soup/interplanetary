@@ -1,25 +1,29 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Slider from '../components/Slider';
 import Dropdown from '../components/Dropdown';
-import { planetParams, planetParams2 } from '../data/planetParameters';
+import { planetParams } from '../data/planetParameters';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import 'flowbite';
 
+const PLANET_POST_URL = '';
+
 
 const LandingPage = () => {
-    const [pType, setPType] = useState(1);
+    const [pType, setPType] = useState(7200);
     const [sTemp, setSTemp] = useState(1);
-    const [pMass, setPMass] = useState(2);
-    const [pRadius, setPRadius] = useState();
-    const [pPeriod, setPPeriod] = useState();
-    const [sMass, setSMass] = useState();
-    const [sRadius, setSRadius] = useState();
-    const [psAge, setPsAge] = useState();
-    const [sLuminosity, setSLuminosity] = useState();
-    const [sFlux, setSFlux] = useState();
+    const [pMass, setPMass] = useState(0);
+    const [pRadius, setPRadius] = useState(0);
+    const [pPeriod, setPPeriod] = useState(1);
+    const [sMass, setSMass] = useState(2);
+    const [sRadius, setSRadius] = useState(7);
+    const [psAge, setPsAge] = useState(0);
+    const [sLuminosity, setSLuminosity] = useState(0);
+    // const [sFlux, setSFlux] = useState();
 
-    const [infoPopup, setInfoPopup] = useState(null);
+
+    const navigate = useNavigate();
 
 
     const stateSetters = {
@@ -32,9 +36,42 @@ const LandingPage = () => {
         sRadius: setSRadius,
         psAge: setPsAge,
         sLuminosity: setSLuminosity,
-        sFlux: setSFlux,
+        // sFlux: setSFlux,
 
     };
+
+    const handleSubmit = async () => {
+        const params = {
+            pType,
+            sTemp,
+            pMass,
+            pRadius,
+            pPeriod,
+            sMass,
+            sRadius,
+            psAge,
+            sLuminosity,
+            // sFlux,
+        };
+        console.log(JSON.stringify(params));
+        navigate('/calculate');
+
+        // try {
+        //     const response = await fetch(PLANET_POST_URL, {
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //         },
+        //         body: JSON.stringify(params),
+        //      })
+        //      const result = await response.json();
+
+        //      navigate('/calculate', {state: {result}});
+        // } catch(e) {
+        //     console.error("error sending data to the server", e);
+        // }
+
+    }
 
 
 
@@ -74,11 +111,22 @@ const LandingPage = () => {
                     <div className="mb-4">
                         <div className="block text-sm font-medium text-secondary text-left">
                             {planetParams.map(p => {
-                                return <p key={p.id}>{p.label}: {eval(p.state)}</p>
+                                return (
+                                    <div key={p.id} className="flex justify-between items-center mb-2 p-2 bg-primary rounded-lg shadow-sm">
+                                        <span className="text-sm font-medium text-highlight">{p.label}:</span>
+                                        <span className="text-sm font-medium text-secondary">{eval(p.state)}</span>
+                                    </div>
+                                );
                             })}
 
                         </div>
-                        <button type="button" class="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Make My Planet</button>
+                        <button 
+                            type="button"
+                            class="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+                            onClick={() => {
+                                handleSubmit();
+                            }}
+                        >Make My Planet</button>
 
                     </div>
                 </div>
