@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from sephi import SEPHI, PlanetType, EffectiveTemperature  # Replace `your_script_name` with the filename of your SEPHI class implementation
 import constants  # Ensure constants is correctly defined
 
@@ -37,7 +37,7 @@ def calculate_sephi():
         sephi_value = sephi_instance.calculate_sephi()
 
         # Return the SEPHI value as plain text
-        return str(sephi_value)
+        return jsonify({"sephi": sephi_value}), 200
 
     except Exception as e:
         return str(e), 500
