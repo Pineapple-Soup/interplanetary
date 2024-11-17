@@ -26,6 +26,12 @@ const material2 = new THREE.MeshStandardMaterial({color: 0x0088ff });
 const sphere2 = new THREE.Mesh(geometry2, material2);
 scene.add(sphere2);
 
+const geometry3 = new THREE.SphereGeometry(radius + 0.03, 64, 64); //the atmosphere
+const material3 = new THREE.MeshStandardMaterial({color: 0x0000ff, transparent:true, opacity: 0.1});
+const sphere3 = new THREE.Mesh(geometry3, material3);
+scene.add(sphere3);
+//THIS IS SUPPOSED TO BE ATMOSPHERE BUT WE GOT SHADOWS INSTEAD
+
 const islandPosLat = Math.PI/4;
 const islandPosLon = Math.PI/2;
 const islandRadius = 1;
@@ -41,7 +47,7 @@ function addIsland(islandPosLat, islandPosLon, islandRadius, falloffMultiplier, 
 		const y2 = radius * Math.cos(islandPosLat) * Math.sin(islandPosLon);
 		const z2 = radius * Math.sin(islandPosLat);
 		
-		
+		//calc dist from each point to island center 
 		const distance = Math.sqrt((x2-x)**2 + (y2-y)**2 + (z2-z)**2);
 		// const distance = Math.sqrt(x * x + y * y + z * z);
 		
@@ -55,6 +61,7 @@ function addIsland(islandPosLat, islandPosLon, islandRadius, falloffMultiplier, 
 		// const lonDiff = lon - islandPosLon;
 		// const sphericalDistance = Math.sqrt(latDiff ** 2 + lonDiff ** 2);
 
+	
 		if (distance < islandRadius) {
 			const noiseValue = noise(lon * 10, lat * 10);
 	
@@ -73,8 +80,8 @@ function addIsland(islandPosLat, islandPosLon, islandRadius, falloffMultiplier, 
 }
 
 addIsland(islandPosLat,islandPosLon,islandRadius, 0.035, 0.02);
-addIsland(0.5 * islandPosLat, 0.5 * islandPosLon,0.5 * islandRadius, 0.2, 0.1);
-addIsland(-islandPosLat,islandPosLon,islandRadius, 0.04, 0.001);
+addIsland(0.5 * islandPosLat, 0.5 * islandPosLon,0.5 * islandRadius, 0.1, 0.025);
+// addIsland(-islandPosLat,islandPosLon,islandRadius, 0.04, 0.001);
 
 geometry.attributes.position.needsUpdate = true;
 geometry.computeVertexNormals();
