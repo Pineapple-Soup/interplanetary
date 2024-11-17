@@ -5,33 +5,29 @@ from enum import Enum
 # TODO: Add docstrings to the class and its methods
 
 class PlanetType(Enum):
-    ROCKY = 1
+    ROCKY = 1   
     ICY = 2
     ICE_GIANT = 3
     GAS_GIANT = 4
 
 class SEPHI:
-    def __init__(self, planet_mass, planet_radius, stellar_mass, stellar_radius, stellar_effective_temperature, planetary_system_age, orbital_period, stellar_luminosity, stellar_flux, planet_type) -> None:
+    def __init__(self, planet_mass, planet_radius, stellar_mass, stellar_radius, stellar_effective_temperature, planetary_system_age, orbital_period, stellar_luminosity, planet_type) -> None:
         self.planet_mass = planet_mass
         self.planet_radius = planet_radius
         self.stellar_mass = stellar_mass
         self.stellar_radius = stellar_radius
         self.stellar_effective_temperature = stellar_effective_temperature
-        self.planetary_system_age = planetary_system_age
+        self.planetary_system_age = planetary_system_age    
         self.orbital_period = orbital_period
         self.stellar_luminosity = stellar_luminosity
-        self.stellar_fuux = stellar_flux
         self.planet_type = planet_type
 
     
     def get_relative_mass(self):
-        return self.planet_mass / constants.EARTH_MASS
+        return self.planet_mass / constants.EARTH_MASS 
     
     def get_relative_radius(self):
         return self.planet_radius / constants.EARTH_RADIUS
-    
-    def get_relative_luminosity(self):
-        return self.stellar_luminosity / constants.SOLAR_LUMINOSITY
     
     def get_planet_surface_gravity(self):
         return constants.GRAVITATIONAL_CONSTANT * self.planet_mass / self.planet_radius**2
@@ -48,15 +44,21 @@ class SEPHI:
     def calculate_L1(self):
         relative_mass = self.get_relative_mass()
         relative_radius = self.get_relative_radius()
-        mu1 = math.cbrt(3 * relative_mass)/(constants.ENSTATITE_DENSITY * math.pi * 4)
-        half_density = 0.5 * constants.WATER_DENSITY + 0.5 * constants.ENSTATITE_DENSITY
-        mu2 = math.cbrt(3 * relative_mass)/(half_density * math.pi * 4)
+        mu1 = math.cbrt((3 * self.planet_mass)/(constants.ENSTATITE_DENSITY * math.pi * 4))
+        half_density = 0.5 * (constants.WATER_DENSITY +constants.ENSTATITE_DENSITY)
+        mu2 = math.cbrt((3 * self.planet_mass)/(half_density * math.pi * 4))
         sigma1 = (mu2 - mu1) / 3
-        if relative_mass <= mu1:
+        print("mu1: ", mu1)
+        if relative_radius <= mu1:
+            print("returning 1")
             return 1
-        elif mu2 <= relative_mass:
+        elif mu2 <= relative_radius:
+            print("mu2: ", mu2)
+            print ("relative_radius: ", self.planet_radius)
+            print("returning 0")
             return 0
         else:
+            print("this is corrct please be here")
             return math.exp(-0.5 * ((relative_radius - mu1)/sigma1)**2)
 
     def calculate_L2(self):
@@ -71,34 +73,9 @@ class SEPHI:
             return math.exp(-0.5 * ((escape_velocity_relative - 1)/sigma_22) ** 2)
 
     def calculate_L3(self):
-        hz_distance = math.sqrt(self.stellar_luminosity / self.stellar_flux)
-
-        if hz_distance < .51:
-            return 0
-        elif hz_distance >= .51 and hz_distance < .95:
-            mu = .95
-            sigma = (.95 - .51) / 3
-
-            return math.exp(-0.5 * ((hz_distance - mu) / sigma) ** 2)
-        
-        elif hz_distance >= .95 and hz_distance <= 1.68:
-            return 1;
-
-        else:
-            mu = 1.68
-            sigma = (2.4 - 1.68) / 3
-
-            return math.exp(-0.5 * ((hz_distance - mu) / sigma) ** 2)
+        return 1
 
     def calculate_L4(self):
-<<<<<<< HEAD
-        density = self.get_relative_mass() / ((4 / 3 * math.pi) * (self.get_relative_radius ** 3))
-        density = density ** (1/2)
-        mag_radius = self.get_relative_radius() ** (7 / 2)
-        mag_field = density * mag_radius * self.get_angular_frequency()
-        return mag_field
-      
-=======
         density, r, F = 0, 0, 0
         alpha = 1
         sigma4 = 1/3
@@ -121,11 +98,34 @@ class SEPHI:
         magnetic_moment_relative = alpha * math.sqrt(density) * (r ** (10/3)) * math.cbrt(F)
         return math.exp(-0.5 * ((magnetic_moment_relative - 1)/sigma4)**2) if (magnetic_moment_relative < 1) else 1
 
->>>>>>> 69a1d15f9de679ca90a445c4dd38cca4e30d7b7c
     def calculate_sephi(self):
         L1 = self.calculate_L1()
         L2 = self.calculate_L2()
         L3 = self.calculate_L3()
         L4 = self.calculate_L4()
 
-        return (L1 * L2 * L3 * L4) ** (1/4)
+        print("L1: ", L1)
+        print("L2: ", L2)
+        print("L3: ", L3)
+        print("L4: ", L4)
+
+        print("L1 * L2 * L3 * L4: ", L1 * L2 * L3 * L4)
+        return L1 * L2 * L3 * L4
+
+def __main__():
+    earth_sephi = SEPHI(
+    planet_mass= 5.972e24,
+    planet_radius= 6371e3,
+    stellar_mass=1.989e30,
+    stellar_radius=6.957e8,
+    stellar_effective_temperature= 5778,
+    planetary_system_age=4.5e9,
+    orbital_period=365.25,  # Earth's orbital period
+    stellar_luminosity= 3.828e26,
+    planet_type="ROCKY"  # Earth is a rocky planet
+    )
+
+    print("earth:", earth_sephi.calculate_sephi())
+
+if __name__ == "__main__":
+    __main__()

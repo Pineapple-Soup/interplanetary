@@ -1,5 +1,5 @@
 from flask import Flask, request
-from sephi import SEPHI  # Replace `your_script_name` with the filename of your SEPHI class implementation
+from sephi import SEPHI, PlanetType  # Replace `your_script_name` with the filename of your SEPHI class implementation
 import constants  # Ensure constants is correctly defined
 
 app = Flask(__name__)
@@ -14,9 +14,11 @@ def calculate_sephi():
         required_fields = [
             "planet_mass", "planet_radius", "stellar_mass", "stellar_radius",
             "stellar_effective_temperature", "planetary_system_age", "orbital_period",
-            "stellar_luminosity", "stellar_flux"
+            "stellar_luminosity", "planet_type"
         ]
-        if not all(field in data for field in required_fields):  # Correct way to check keys
+
+        if not all(field in data for field in required_fields):
+            print(data)  # Correct way to check keys
             return "Missing required fields", 400
 
         # Instantiate SEPHI with input data
@@ -29,7 +31,7 @@ def calculate_sephi():
             planetary_system_age=data["planetary_system_age"],
             orbital_period=data["orbital_period"],
             stellar_luminosity=data["stellar_luminosity"],
-            stellar_flux=data["stellar_flux"]
+            planet_type=PlanetType[data["planet_type"].upper()],  # Accessing keys correctly
         )
 
         # Calculate SEPHI
