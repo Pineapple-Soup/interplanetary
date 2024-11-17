@@ -78,12 +78,12 @@ class SEPHI:
         g_relative = self.get_relative_gravity()
         r_relative = self.get_relative_radius()
         escape_velocity_relative = math.sqrt(2 * g_relative * r_relative)
-        sigma_21 = 1/3
-        sigma_22 = (8.66 - 1) / 3
+        sigma2_1 = 1/3
+        sigma2_2 = (8.66 - 1) / 3
         if escape_velocity_relative < 1:
-            return math.exp(-0.5 * ((escape_velocity_relative - 1)/sigma_21) ** 2)
+            return math.exp(-0.5 * (((escape_velocity_relative - 1)/sigma2_1) ** 2))
         else:
-            return math.exp(-0.5 * ((escape_velocity_relative - 1)/sigma_22) ** 2)
+            return math.exp(-0.5 * (((escape_velocity_relative - 1)/sigma2_2) ** 2))
 
     def calculate_L3(self):
         effective_temperature = self.stellar_effective_temperature.value
