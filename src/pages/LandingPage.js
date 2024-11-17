@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import 'flowbite';
 
-const PLANET_POST_URL = '';
+const PLANET_POST_URL = 'http://127.0.0.1:5000/calculate_sephi';
 
 
 const LandingPage = () => {
@@ -42,6 +42,7 @@ const LandingPage = () => {
     };
 
     const handleSubmit = async () => {
+        console.log("button clicked");
         const params = {
             pType,
             sTemp,
@@ -55,22 +56,23 @@ const LandingPage = () => {
             // sFlux,
         };
         console.log(JSON.stringify(params));
-        navigate('/calculate');
+       
 
-        // try {
-        //     const response = await fetch(PLANET_POST_URL, {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //         },
-        //         body: JSON.stringify(params),
-        //      })
-        //      const result = await response.json();
+        try {
+            const response = await fetch(PLANET_POST_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(params),
+             })
+             const result = await response.json();
+             console.log(result);
 
-        //      navigate('/calculate', {state: {result}});
-        // } catch(e) {
-        //     console.error("error sending data to the server", e);
-        // }
+             navigate('/calculate', {state: {result}});
+        } catch(e) {
+            console.error("error sending data to the server", e);
+        }
 
     }
 
@@ -124,7 +126,7 @@ const LandingPage = () => {
                         </div>
                         <button 
                             type="button"
-                            class="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+                            className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
                             onClick={() => {
                                 handleSubmit();
                             }}
