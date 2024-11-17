@@ -12,25 +12,26 @@ def calculate_sephi():
         
         # Extract required fields
         required_fields = [
-            "planet_mass", "planet_radius", "stellar_mass",
-            "stellar_effective_temperature", "orbital_period",
-            "stellar_luminosity", "planet_type"
+            "pMass", "pRadius", "sMass",
+            "sTemp", "pPeriod",
+            "sLuminosity", "pType"
         ]
 
         if not all(field in data for field in required_fields):
             print(data)  # Correct way to check keys
-            return "Missing required fields", 400
+            return jsonify({"err": 1})
 
-        stellar_effective_temperature = EffectiveTemperature[data["sTemp"].upper()]
+        stellar_effective_temperature = EffectiveTemperature[data["sTemp"].name]
         # Instantiate SEPHI with input data
         sephi_instance = SEPHI(
+            planet_type=PlanetType[data["pType"].upper()], 
             planet_mass=data["pMass"],  # Accessing keys correctly
             planet_radius=data["pRadius"],
             stellar_mass=data["sMass"],
             stellar_effective_temperature=stellar_effective_temperature,  # Correctly using enum
             orbital_period=data["pPeriod"],
             stellar_luminosity=data["sLuminosity"],
-            planet_type=PlanetType[data["pType"].upper()],  # Accessing keys correctly
+            # Accessing keys correctly
         )
 
         # Calculate SEPHI
