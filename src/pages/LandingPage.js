@@ -105,7 +105,7 @@ const LandingPage = () => {
             </div>
             <div className="w-3/4 p-4">
                 
-                <Planet/>
+                <Planet type={pType} temperature={sTemp} radius={pRadius} luminosity={sLuminosity}/>
             </div>
             <div className="w-1/4 p-4 border border-highlight rounded-lg bg-tertiary overflow-y-auto h-screen">
                 <div className="text-center">

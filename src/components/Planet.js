@@ -38,38 +38,36 @@ function addIsland(geometry, radius, islandPosLat, islandPosLon, islandRadius, f
 }
 
 // Land Sphere Component
-const LandSphere = ({ radius }) => {
-  const landRef = useRef();
 
-  React.useEffect(() => {
-    const landGeometry = landRef.current.geometry;
+// LandSphere.js
+// import React from 'react';
 
-    // Add islands to the sphere
-    addIsland(landGeometry, radius, Math.PI / 4, Math.PI / 2, 2, 0.35, 0.1);
-    addIsland(landGeometry, 0.5 * Math.PI / 4, 0.5 * Math.PI / 2, 1, 0.25, 0.05);
-  }, [radius]);
-
-  return (
-    <mesh ref={landRef}>
-      <sphereGeometry args={[radius, 64, 64]} />
-      <meshStandardMaterial color={0x90b270} />
-    </mesh>
-  );
-};
-
-// Sea Sphere Component
-const SeaSphere = ({ radius }) => (
+const LandSphere = ({ radius }) => (
   <mesh>
-    <sphereGeometry args={[radius + 0.01, 64, 64]} />
-    <meshStandardMaterial color={0x0088ff} />
+    <sphereGeometry args={[radius, 64, 64]} />
+    <meshStandardMaterial color={0x8B4513} />
   </mesh>
 );
 
-// Atmosphere Component
+
+// SeaSphere.js
+// import React from 'react';
+
+const SeaSphere = ({ radius }) => (
+  <mesh>
+    <sphereGeometry args={[radius, 64, 64]} />
+    <meshStandardMaterial color={0x1E90FF} />
+  </mesh>
+);
+
+
+// Atmosphere.js
+// import React from 'react';
+
 const Atmosphere = ({ radius }) => (
   <mesh>
-    <sphereGeometry args={[radius + 0.03, 64, 64]} />
-    <meshBasicMaterial color={0x0000ff} transparent opacity={0.05} />
+    <sphereGeometry args={[radius + 0.1, 64, 64]} />
+    <meshBasicMaterial color={0x87CEEB} transparent opacity={0.5} />
   </mesh>
 );
 
@@ -82,8 +80,8 @@ const Glow = ({ radius }) => (
 );
 
 // Main Scene Component
-const Planet = () => {
-  const radius = 5;
+const Planet = ({type, temperature, radius, luminosity}) => {
+    radius = Math.log10(radius) - 3;
 
   return (
     <Canvas camera={{ position: [0, 0, 12], fov: 75 }}>
