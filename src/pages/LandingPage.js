@@ -138,3 +138,30 @@ const LandingPage = () => {
 };
 
 export default LandingPage;
+
+export const planetColors = {
+    "Rocky": {
+      land: "#90b270", // brown
+      sea: "#1E90FF",  // blue
+      atmosphere: "#87CEEB", // light blue 
+      opacity: 1
+    },
+    "Ice Giant": {
+      land: "#ADD8E6", // Light blue for icy surface
+      sea: "#4682B4",  // Steel blue for frozen seas
+      atmosphere: "#B0E0E6", // Pale blue atmosphere
+      opacity: 1
+    },
+    "Gas Giant": {
+      land: "#FFD700", // Gold for gaseous clouds
+      sea: "#FFA500",  // Orange for lower atmosphere
+      atmosphere: "#FF4500", // Reddish-orange for outer atmosphere
+      opacity: .3
+    },
+    "Icy": {
+      land: "#FFFFFF", // White for ice
+      sea: "#B0E0E6",  // Pale blue for frozen oceans
+      atmosphere: "#D3D3D3", // Grayish atmosphere
+      opacity: 1
+    },
+  };
