@@ -1,4 +1,6 @@
-# **InteR'planetary**
+# **InteR'planetary**   
+*Submitted to [Cutie Hack 2024](https://devpost.com/software/inter-planetary)* 🍊 
+
 
 InteR'planetary is an interactive web application designed to spark curiosity about space science by allowing users to design their own planets and evaluate their habitability based on scientific principles.
 
