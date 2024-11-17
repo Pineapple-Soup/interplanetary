@@ -21,7 +21,8 @@ def calculate_sephi():
             print(data)  # Correct way to check keys
             return jsonify({"err": 1})
 
-        stellar_effective_temperature = EffectiveTemperature[data["sTemp"].name]
+
+        stellar_effective_temperature = EffectiveTemperature[data["sTemp"].name]  # Accessing keys correctly
         # Instantiate SEPHI with input data
         sephi_instance = SEPHI(
             planet_type=PlanetType[data["pType"].upper()], 
