@@ -51,8 +51,8 @@ const Planet = () => {
         <Canvas>
             <ambientLight />
             <pointLight position={[10, 10, 10]} />
-            {/* <axesHelper args={[10]} />
-            <gridHelper args={[10, 10]} /> */}
+            <axesHelper args={[10]} />
+            <gridHelper args={[10, 10]} />
             <mesh ref={sphereRef}>
                 <sphereGeometry args={[5, 64, 64]} />
                 <meshStandardMaterial color={0x00ff00} />

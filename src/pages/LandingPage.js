@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Slider from '../components/Slider';
 import Dropdown from '../components/Dropdown';
+import Planet from '../components/Planet';
 import { planetParams } from '../data/planetParameters';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
@@ -103,7 +104,8 @@ const LandingPage = () => {
 
             </div>
             <div className="w-3/4 p-4">
-                {/* Planet building canvas */}
+                
+                <Planet/>
             </div>
             <div className="w-1/4 p-4 border border-highlight rounded-lg bg-tertiary overflow-y-auto h-screen">
                 <div className="text-center">
