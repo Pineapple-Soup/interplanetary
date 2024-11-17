@@ -56,6 +56,7 @@ const LandingPage = () => {
             // sFlux,
         };
         console.log(JSON.stringify(params));
+        console.log("jsonified");
        
 
         try {
@@ -66,7 +67,9 @@ const LandingPage = () => {
                 },
                 body: JSON.stringify(params),
              })
+             
              const result = await response.json();
+             console.log("result:");
              console.log(result);
 
              navigate('/calculate', {state: {result}});
