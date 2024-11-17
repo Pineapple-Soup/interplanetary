@@ -1,72 +1,103 @@
-import React, { useRef, useEffect } from 'react';
-import { Canvas } from '@react-three/fiber';
-import * as THREE from 'three';
+import React, { useRef } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { OrbitControls } from "@react-three/drei";
+import * as THREE from "three";
+import { createNoise2D } from "simplex-noise";
 
+// Function to add islands
+function addIsland(geometry, radius, islandPosLat, islandPosLon, islandRadius, falloffMultiplier, noiseMultiplier) {
+  const noise = createNoise2D();
+  const positionAttribute = geometry.attributes.position;
+
+  for (let i = 0; i < positionAttribute.count; i++) {
+    const x = positionAttribute.getX(i);
+    const y = positionAttribute.getY(i);
+    const z = positionAttribute.getZ(i);
+
+    const x2 = radius * Math.cos(islandPosLat) * Math.cos(islandPosLon);
+    const y2 = radius * Math.cos(islandPosLat) * Math.sin(islandPosLon);
+    const z2 = radius * Math.sin(islandPosLat);
+
+    const distance = Math.sqrt((x2 - x) ** 2 + (y2 - y) ** 2 + (z2 - z) ** 2);
+
+    if (distance < islandRadius) {
+      const noiseValue = noise(x * 0.5, z * 0.5);
+      const falloff = Math.cos((distance / islandRadius) * Math.PI / 2);
+      const height = falloffMultiplier * falloff + noiseValue * noiseMultiplier;
+      const newLength = radius + height;
+
+      const normalized = new THREE.Vector3(x, y, z).normalize();
+      const displaced = normalized.multiplyScalar(newLength);
+
+      positionAttribute.setXYZ(i, displaced.x, displaced.y, displaced.z);
+    }
+  }
+
+  positionAttribute.needsUpdate = true;
+  geometry.computeVertexNormals();
+}
+
+// Land Sphere Component
+const LandSphere = ({ radius }) => {
+  const landRef = useRef();
+
+  React.useEffect(() => {
+    const landGeometry = landRef.current.geometry;
+
+    // Add islands to the sphere
+    addIsland(landGeometry, radius, Math.PI / 4, Math.PI / 2, 2, 0.35, 0.1);
+    addIsland(landGeometry, 0.5 * Math.PI / 4, 0.5 * Math.PI / 2, 1, 0.25, 0.05);
+  }, [radius]);
+
+  return (
+    <mesh ref={landRef}>
+      <sphereGeometry args={[radius, 64, 64]} />
+      <meshStandardMaterial color={0x90b270} />
+    </mesh>
+  );
+};
+
+// Sea Sphere Component
+const SeaSphere = ({ radius }) => (
+  <mesh>
+    <sphereGeometry args={[radius + 0.01, 64, 64]} />
+    <meshStandardMaterial color={0x0088ff} />
+  </mesh>
+);
+
+// Atmosphere Component
+const Atmosphere = ({ radius }) => (
+  <mesh>
+    <sphereGeometry args={[radius + 0.03, 64, 64]} />
+    <meshBasicMaterial color={0x0000ff} transparent opacity={0.05} />
+  </mesh>
+);
+
+// Outer Glow Component
+const Glow = ({ radius }) => (
+  <mesh>
+    <sphereGeometry args={[radius + 1, 64, 64]} />
+    <meshBasicMaterial color={0xdb2727} transparent opacity={0.15} />
+  </mesh>
+);
+
+// Main Scene Component
 const Planet = () => {
-    const sphereRef = useRef();
-    const seaRef = useRef();
-    const atmosphereRef = useRef();
+  const radius = 5;
 
-    useEffect(() => {
-        const radius = 5;
+  return (
+    <Canvas camera={{ position: [0, 0, 12], fov: 75 }}>
+      <ambientLight intensity={0.5} />
+      <directionalLight position={[10, 10, 10]} intensity={1} />
+      <OrbitControls />
 
-        // Add island function
-        const addIsland = (sphere, islandPosLat, islandPosLon, islandRadius, falloffMultiplier, noiseMultiplier) => {
-            const positionAttribute = sphere.geometry.attributes.position;
-            for (let i = 0; i < positionAttribute.count; i++) {
-                const x = positionAttribute.getX(i);
-                const y = positionAttribute.getY(i);
-                const z = positionAttribute.getZ(i);
-
-                const x2 = radius * Math.cos(islandPosLat) * Math.cos(islandPosLon);
-                const y2 = radius * Math.cos(islandPosLat) * Math.sin(islandPosLon);
-                const z2 = radius * Math.sin(islandPosLat);
-
-                // Calculate distance from each point to island center
-                const distance = Math.sqrt((x2 - x) ** 2 + (y2 - y) ** 2 + (z2 - z) ** 2);
-
-                const spherical = new THREE.Spherical();
-                spherical.setFromCartesianCoords(x, y, z);
-
-                const lat = spherical.phi;
-                const lon = spherical.theta;
-
-                // Modify the position based on distance and other parameters
-                if (distance < islandRadius) {
-                    const falloff = Math.exp(-distance * falloffMultiplier);
-                    const noise = Math.random() * noiseMultiplier;
-                    positionAttribute.setXYZ(i, x + falloff + noise, y + falloff + noise, z + falloff + noise);
-                }
-            }
-            positionAttribute.needsUpdate = true;
-        };
-
-        // Add island to the sphere
-        if (sphereRef.current) {
-            addIsland(sphereRef.current, Math.PI / 4, Math.PI / 2, 2, 0.1, 0.1);
-        }
-    }, []);
-
-    return (
-        <Canvas>
-            <ambientLight />
-            <pointLight position={[10, 10, 10]} />
-            <axesHelper args={[10]} />
-            <gridHelper args={[10, 10]} />
-            <mesh ref={sphereRef}>
-                <sphereGeometry args={[5, 64, 64]} />
-                <meshStandardMaterial color={0x00ff00} />
-            </mesh>
-            <mesh ref={seaRef}>
-                <sphereGeometry args={[5.01, 64, 64]} />
-                <meshStandardMaterial color={0x0088ff} />
-            </mesh>
-            <mesh ref={atmosphereRef}>
-                <sphereGeometry args={[5.03, 64, 64]} />
-                <meshStandardMaterial color={0x0000ff} transparent opacity={0.1} />
-            </mesh>
-        </Canvas>
-    );
+      {/* Add layers */}
+      <LandSphere radius={radius} />
+      <SeaSphere radius={radius} />
+      <Atmosphere radius={radius} />
+      <Glow radius={radius} />
+    </Canvas>
+  );
 };
 
 export default Planet;
