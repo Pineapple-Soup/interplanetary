@@ -11,7 +11,8 @@ export const planetParams = [
             {value: 5700, label: "Class G - 5700K"},
             {value: 4800, label: "Class K - 4800K"},
             {value: 3800, label: "Class M - 3800K"}
-        ]
+        ],
+        units: "Kelvin"
     },
     {
         id: 10,
@@ -23,7 +24,8 @@ export const planetParams = [
             {value: 2, label: "Ice Giant"},
             {value: 3, label: "Gas Giant"},
             {value: 4, label: "Icy"}
-        ]
+        ],
+        units: ''
     },
     {
         id: 1,
@@ -34,7 +36,7 @@ export const planetParams = [
         max: 60000,
         step: 100,
         info: "This is the mass of the planet in earth masses",
-        units: "Earths"
+        units: "*10^22 kg"
     },
     {
         id: 2,
@@ -45,7 +47,7 @@ export const planetParams = [
         max: 60000,
         step: 1,
         info : "This is the radius of the planet in Earth radii.",
-        units: "Earth Radii"
+        units: "*10^4 meters"
     },
     {
         id: 3,
@@ -66,7 +68,8 @@ export const planetParams = [
         min: 2,
         max: 20000,
         step: 1,
-        info: "This is the mass of the star in Solar masses."
+        info: "This is the mass of the star in Solar masses.",
+        units: "*10^28 kg"
     },
     {
         id: 5,
@@ -76,7 +79,8 @@ export const planetParams = [
         min: 7,
         max: 70000,
         step: 1,
-        info: "This is the radius of the star in Solar radii."
+        info: "This is the radius of the star in Solar radii.",
+        units: "*10^6"
     },
     // {
     //     id: 6,
@@ -97,7 +101,8 @@ export const planetParams = [
         min: 0,
         max: 12,
         step: 1,
-        info: "This is the age of the planetary system in billions of years."
+        info: "This is the age of the planetary system in billions of years.",
+        units: "Billion Years"
     },
     {
         id: 8,
@@ -107,7 +112,8 @@ export const planetParams = [
         min: 0,
         max: 100,
         step: 1,
-        info: "This is the luminosity of the star in Solar luminosities."
+        info: "This is the luminosity of the star in Solar luminosities.",
+        units: "*10^24 W/m^2"
     },
 
 

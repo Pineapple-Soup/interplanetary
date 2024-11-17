@@ -11,7 +11,7 @@ const PLANET_POST_URL = '';
 
 
 const LandingPage = () => {
-    const [pType, setPType] = useState(7200);
+    const [pType, setPType] = useState("Rocky");
     const [sTemp, setSTemp] = useState(1);
     const [pMass, setPMass] = useState(0);
     const [pRadius, setPRadius] = useState(0);
@@ -114,7 +114,7 @@ const LandingPage = () => {
                                 return (
                                     <div key={p.id} className="flex justify-between items-center mb-2 p-2 bg-primary rounded-lg shadow-sm">
                                         <span className="text-sm font-medium text-highlight">{p.label}:</span>
-                                        <span className="text-sm font-medium text-secondary">{eval(p.state)}</span>
+                                        <span className="text-sm font-medium text-secondary">{eval(p.state)} {p.units}</span>
                                     </div>
                                 );
                             })}
