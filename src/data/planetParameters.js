@@ -1,5 +1,6 @@
 
 
+
 export const planetParams = [
     {
         id: 9,
@@ -12,7 +13,8 @@ export const planetParams = [
             {value: 4800, label: "Class K - 4800K"},
             {value: 3800, label: "Class M - 3800K"}
         ],
-        units: "Kelvin"
+        units: "Kelvin",
+        info: "This is the temperature of the star's surface in Kelvin"
     },
     {
         id: 10,
@@ -25,7 +27,8 @@ export const planetParams = [
             {value: "Gas Giant", label: "Gas Giant"},
             {value: "Icy", label: "Icy"}
         ],
-        units: ''
+        units: '',
+        info: "This is the type of planet you want to create."
     },
     {
         id: 1,
