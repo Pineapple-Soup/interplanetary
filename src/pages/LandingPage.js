@@ -57,25 +57,26 @@ const LandingPage = () => {
         };
         console.log(JSON.stringify(params));
         console.log("jsonified");
-       
-
-        try {
-            const response = await fetch(PLANET_POST_URL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(params),
-             })
+        // const habitable = pType == 5700 ? 1 : 0;
+        // navigate('/calculate', { state: { habitable } });
+        navigate('/calculate');
+        // try {
+        //     const response = await fetch(PLANET_POST_URL, {
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //         },
+        //         body: JSON.stringify(params),
+        //      })
              
-             const result = await response.json();
-             console.log("result:");
-             console.log(result);
+        //      const result = await response.json();
+        //      console.log("result:");
+        //      console.log(result);
 
-             navigate('/calculate', {state: {result}});
-        } catch(e) {
-            console.error("error sending data to the server", e);
-        }
+        //      navigate('/calculate', {state: {result}});
+        // } catch(e) {
+        //     console.error("error sending data to the server", e);
+        // }
 
     }
 

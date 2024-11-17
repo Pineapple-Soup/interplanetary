@@ -7,6 +7,7 @@ const ResultPage = () => {
     const [progress, setProgress] = useState(0);
     const [habitable, setHabitable] = useState(false);
     const navigate = useNavigate();
+    // const { habitable } = location.state || {};
 
     useEffect(() => {
         // Simulate a calculation process with randomized progress
