@@ -1,5 +1,5 @@
 from flask import Flask, request
-from sephi import SEPHI, PlanetType  # Replace `your_script_name` with the filename of your SEPHI class implementation
+from sephi import SEPHI, PlanetType, EffectiveTemperature  # Replace `your_script_name` with the filename of your SEPHI class implementation
 import constants  # Ensure constants is correctly defined
 
 app = Flask(__name__)
@@ -12,8 +12,8 @@ def calculate_sephi():
         
         # Extract required fields
         required_fields = [
-            "planet_mass", "planet_radius", "stellar_mass", "stellar_radius",
-            "stellar_effective_temperature", "planetary_system_age", "orbital_period",
+            "planet_mass", "planet_radius", "stellar_mass",
+            "stellar_effective_temperature", "orbital_period",
             "stellar_luminosity", "planet_type"
         ]
 
@@ -21,14 +21,13 @@ def calculate_sephi():
             print(data)  # Correct way to check keys
             return "Missing required fields", 400
 
+        stellar_effective_temperature = EffectiveTemperature[data["stellar_effective_temperature"].upper()]
         # Instantiate SEPHI with input data
         sephi_instance = SEPHI(
             planet_mass=data["planet_mass"],  # Accessing keys correctly
             planet_radius=data["planet_radius"],
             stellar_mass=data["stellar_mass"],
-            stellar_radius=data["stellar_radius"],
-            stellar_effective_temperature=data["stellar_effective_temperature"],
-            planetary_system_age=data["planetary_system_age"],
+            stellar_effective_temperature=stellar_effective_temperature,  # Correctly using enum
             orbital_period=data["orbital_period"],
             stellar_luminosity=data["stellar_luminosity"],
             planet_type=PlanetType[data["planet_type"].upper()],  # Accessing keys correctly

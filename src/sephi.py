@@ -21,7 +21,7 @@ class SEPHI:
         self.planet_mass = planet_mass
         self.planet_radius = planet_radius
         self.stellar_mass = stellar_mass 
-        self.stellar_effective_temperature = stellar_effective_temperature.value
+        self.stellar_effective_temperature = stellar_effective_temperature
         self.orbital_period = orbital_period #in days
         self.stellar_luminosity = stellar_luminosity
         self.planet_type = planet_type
@@ -53,6 +53,9 @@ class SEPHI:
 
     def get_density(self):
         return self.planet_mass / ((4 / 3) * math.pi * self.planet_radius**3)
+    
+    def get_relative_luminosity(self):
+        return self.stellar_luminosity / constants.SOLAR_LUMINOSITY
 
     def calculate_L1(self):
         relative_mass = self.get_relative_mass()
