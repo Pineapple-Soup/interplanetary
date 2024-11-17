@@ -3,6 +3,8 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
 import { createNoise2D } from "simplex-noise";
+import { planetColors } from "../pages/LandingPage";
+// import { tempColors } from "../pages/LandingPage";
 
 // Function to add islands
 function addIsland(geometry, radius, islandPosLat, islandPosLon, islandRadius, falloffMultiplier, noiseMultiplier) {
@@ -37,45 +39,55 @@ function addIsland(geometry, radius, islandPosLat, islandPosLon, islandRadius, f
   geometry.computeVertexNormals();
 }
 
-// Land Sphere Component
-
-// LandSphere.js
+// land
 // import React from 'react';
 
-const LandSphere = ({ radius }) => (
+const LandSphere = ({ radius, color, opacity }) => {
+  const landRef = useRef();
+
+  React.useEffect(() => {
+    const landGeometry = landRef.current.geometry;
+
+    // Add islands to the sphere
+    addIsland(landGeometry, radius, Math.PI / 4, Math.PI / 2, 2, radius/10, radius/10);
+    addIsland(landGeometry, radius, Math.PI / -4, Math.PI / -2, 1, radius/10, radius/5);
+  }, [radius]);
+
+  return (
+    <mesh ref={landRef}>
+      <sphereGeometry args={[radius, 64, 64]} />
+      <meshStandardMaterial color={color} transparent opacity={opacity} />
+    </mesh>
+  );
+};
+
+
+// sea
+// import React from 'react';
+
+const SeaSphere = ({ radius, color, opacity }) => (
   <mesh>
     <sphereGeometry args={[radius, 64, 64]} />
-    <meshStandardMaterial color={0x8B4513} />
+    <meshStandardMaterial color={color} transparent opacity={opacity}/>
   </mesh>
 );
 
 
-// SeaSphere.js
+// atmosphere
 // import React from 'react';
 
-const SeaSphere = ({ radius }) => (
-  <mesh>
-    <sphereGeometry args={[radius, 64, 64]} />
-    <meshStandardMaterial color={0x1E90FF} />
-  </mesh>
-);
-
-
-// Atmosphere.js
-// import React from 'react';
-
-const Atmosphere = ({ radius }) => (
+const Atmosphere = ({ radius, color }) => (
   <mesh>
     <sphereGeometry args={[radius + 0.1, 64, 64]} />
-    <meshBasicMaterial color={0x87CEEB} transparent opacity={0.5} />
+    <meshBasicMaterial color={0x87CEEB} transparent opacity={0.1} />
   </mesh>
 );
 
 // Outer Glow Component
-const Glow = ({ radius }) => (
+const Glow = ({ radius}) => (
   <mesh>
     <sphereGeometry args={[radius + 1, 64, 64]} />
-    <meshBasicMaterial color={0xdb2727} transparent opacity={0.15} />
+    <meshBasicMaterial transparent opacity={0.15} />
   </mesh>
 );
 
@@ -83,17 +95,21 @@ const Glow = ({ radius }) => (
 const Planet = ({type, temperature, radius, luminosity}) => {
     radius = Math.log10(radius) - 3;
 
+    // const colors = planetColors[type] || planetColors.Rocky;
+    const colors = planetColors[type];
+    // const glowColors = tempColors[type];
+
   return (
     <Canvas camera={{ position: [0, 0, 12], fov: 75 }}>
       <ambientLight intensity={0.5} />
-      <directionalLight position={[10, 10, 10]} intensity={1} />
+      <directionalLight position={[10, 10, 10]} intensity={luminosity/30} />
       <OrbitControls />
 
       {/* Add layers */}
-      <LandSphere radius={radius} />
-      <SeaSphere radius={radius} />
-      <Atmosphere radius={radius} />
-      <Glow radius={radius} />
+      <LandSphere radius={radius} color={colors.land} opacity={colors.opacity} />
+      <SeaSphere radius={radius} color={colors.sea} opacity={colors.opacity}/>
+      <Atmosphere radius={radius} color={colors.atmosphere} />
+      <Glow radius={radius}  />
     </Canvas>
   );
 };
