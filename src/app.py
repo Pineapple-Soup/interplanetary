@@ -21,7 +21,8 @@ def calculate_sephi():
             print(data)  # Correct way to check keys
             return "Missing required fields", 400
 
-        stellar_effective_temperature = EffectiveTemperature[data["sTemp"].upper()]
+
+        stellar_effective_temperature = EffectiveTemperature[data["sTemp"].name]  # Accessing keys correctly
         # Instantiate SEPHI with input data
         sephi_instance = SEPHI(
             planet_mass=data["pMass"],  # Accessing keys correctly
