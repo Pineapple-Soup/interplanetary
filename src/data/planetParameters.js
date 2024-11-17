@@ -20,10 +20,10 @@ export const planetParams = [
         label: 'Planet Type',
         state: 'pType',
         options: [
-            {value: 1, label: "Rocky"},
-            {value: 2, label: "Ice Giant"},
-            {value: 3, label: "Gas Giant"},
-            {value: 4, label: "Icy"}
+            {value: "Rocky", label: "Rocky"},
+            {value: "Ice Giant", label: "Ice Giant"},
+            {value: "Gas Giant", label: "Gas Giant"},
+            {value: "Icy", label: "Icy"}
         ],
         units: ''
     },
