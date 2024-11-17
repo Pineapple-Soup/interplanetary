@@ -22,7 +22,8 @@ def calculate_sephi():
             return "Missing required fields", 400
 
 
-        stellar_effective_temperature = EffectiveTemperature[data["sTemp"].name]  # Accessing keys correctly
+        stellar_effective_temperature = EffectiveTemperature[data["sTemp"]] # Accessing keys correctly
+        print(stellar_effective_temperature)  # Correct way to access enum
         # Instantiate SEPHI with input data
         sephi_instance = SEPHI(
             planet_mass=data["pMass"],  # Accessing keys correctly
