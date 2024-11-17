@@ -10,12 +10,14 @@ const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerH
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setClearColor(0x000000);
+renderer.setClearColor(0x8a8a8a);
 document.body.appendChild(renderer.domElement);
 
 const controls = new OrbitControls( camera, renderer.domElement );
 
-const radius = 1;
+const radius = 5;
+
+
 const geometry = new THREE.SphereGeometry(radius, 64, 64); //the land
 const material = new THREE.MeshStandardMaterial({color: 0x90b270});
 const sphere = new THREE.Mesh(geometry, material);
@@ -34,10 +36,10 @@ scene.add(sphere3);
 
 const islandPosLat = Math.PI/4;
 const islandPosLon = Math.PI/2;
-const islandRadius = 1;
+const islandRadius = 2;
 
-const positionAttribute = geometry.attributes.position;
-function addIsland(islandPosLat, islandPosLon, islandRadius, falloffMultiplier, noiseMultiplier){
+function addIsland(sphere, islandPosLat, islandPosLon, islandRadius, falloffMultiplier, noiseMultiplier){
+	const positionAttribute = sphere.geometry.attributes.position;
 	for(let i = 0; i < positionAttribute.count; i++){
 		const x = positionAttribute.getX(i);
 		const y = positionAttribute.getY(i);
@@ -69,7 +71,7 @@ function addIsland(islandPosLat, islandPosLon, islandRadius, falloffMultiplier, 
 			const height = falloffMultiplier * falloff + noiseValue * noiseMultiplier;
 			// const height = 0.05 * falloff;
 	
-			const newLength = 1 + height;
+			const newLength = radius + height;
 
 			const normalized = new THREE.Vector3(x, y, z).normalize();
 			const displaced = normalized.multiplyScalar(newLength);
@@ -77,14 +79,24 @@ function addIsland(islandPosLat, islandPosLon, islandRadius, falloffMultiplier, 
 			positionAttribute.setXYZ(i, displaced.x, displaced.y, displaced.z);	
 		}
 	}
+	geometry.attributes.position.needsUpdate = true;
+	sphere.geometry.computeVertexNormals();
 }
 
-addIsland(islandPosLat,islandPosLon,islandRadius, 0.035, 0.02);
-addIsland(0.5 * islandPosLat, 0.5 * islandPosLon,0.5 * islandRadius, 0.1, 0.025);
-// addIsland(-islandPosLat,islandPosLon,islandRadius, 0.04, 0.001);
+//radius 1 addIslands
+// addIsland(sphere,islandPosLat,islandPosLon,islandRadius, 0.035, 0.02);
+// addIsland(sphere,0.5 * islandPosLat, 0.5 * islandPosLon,0.5 * islandRadius, 0.1, 0.025);
 
-geometry.attributes.position.needsUpdate = true;
-geometry.computeVertexNormals();
+//radius 5
+addIsland(sphere,islandPosLat,islandPosLon,islandRadius, 0.35, 0.1);
+addIsland(sphere,0.5 * islandPosLat, 0.5 * islandPosLon,0.5 * islandRadius, 0.5, 0.075);
+
+
+
+const geometry4 = new THREE.SphereGeometry(radius + 1, 64, 64); //the atmosphere
+const material4 = new THREE.MeshBasicMaterial({color: 0xdb2727, transparent:true, opacity: 0.2});
+const sphere4 = new THREE.Mesh(geometry4, material4);
+scene.add(sphere4);
 
 const light = new THREE.DirectionalLight(0xffffff, 1);
 light.position.set(10, 10, 10);
