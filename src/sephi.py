@@ -10,17 +10,23 @@ class PlanetType(Enum):
     ICE_GIANT = 3
     GAS_GIANT = 4
 
+class EffectiveTemperature(Enum):
+    M = 3800
+    K = 4800
+    G = 5700
+    F = 7200
+
 class SEPHI:
     def __init__(self, planet_mass, planet_radius, stellar_mass, stellar_radius, stellar_effective_temperature, planetary_system_age, orbital_period, stellar_luminosity, stellar_flux, planet_type) -> None:
         self.planet_mass = planet_mass
         self.planet_radius = planet_radius
-        self.stellar_mass = stellar_mass
-        self.stellar_radius = stellar_radius
-        self.stellar_effective_temperature = stellar_effective_temperature
-        self.planetary_system_age = planetary_system_age
-        self.orbital_period = orbital_period
+        self.stellar_mass = stellar_mass #unused
+        self.stellar_radius = stellar_radius #unused
+        self.stellar_effective_temperature = stellar_effective_temperature.value
+        self.planetary_system_age = planetary_system_age #unused
+        self.orbital_period = orbital_period #in days
         self.stellar_luminosity = stellar_luminosity
-        self.stellar_fuux = stellar_flux
+        self.stellar_fuux = stellar_flux #unused
         self.planet_type = planet_type
 
     
@@ -42,6 +48,15 @@ class SEPHI:
     def get_angular_frequency(self):
         return 2 * math.pi / self.orbital_period
     
+    def get_orbital_period_in_seconds(self):
+        return self.orbital_period * 24 * 60 * 60
+    
+    def calculate_semi_major_axis(self):
+        return math.cbrt(((self.get_orbital_period_in_seconds()**2) * constants.GRAVITATIONAL_CONSTANT * self.stellar_mass) / (4 * (math.pi**2)))
+    
+    def calculate_semi_major_axis_relative(self):
+        return self.calculate_semi_major_axis() / constants.EARTH_SEMI_MAJOR_AXIS
+
     def get_density(self):
         return self.planet_mass / ((4 / 3) * math.pi * self.planet_radius**3)
 
@@ -71,34 +86,28 @@ class SEPHI:
             return math.exp(-0.5 * ((escape_velocity_relative - 1)/sigma_22) ** 2)
 
     def calculate_L3(self):
-        hz_distance = math.sqrt(self.stellar_luminosity / self.stellar_flux)
-
-        if hz_distance < .51:
-            return 0
-        elif hz_distance >= .51 and hz_distance < .95:
-            mu = .95
-            sigma = (.95 - .51) / 3
-
-            return math.exp(-0.5 * ((hz_distance - mu) / sigma) ** 2)
-        
-        elif hz_distance >= .95 and hz_distance <= 1.68:
-            return 1;
-
+        effective_temperature = self.stellar_effective_temperature.value
+        S1 = 1.7753 + (1.4316e-4*(effective_temperature - 5780)) + (2.9875e-9*(effective_temperature - 5780)**2) + ((-7.5702e-12) * (effective_temperature - 5780)**3) + ((-1.1635e-15) * (effective_temperature - 5780)**4)
+        S2 = 1.0512 + (1.3242e-4*(effective_temperature - 5780)) + (1.5418e-8*(effective_temperature - 5780)**2) + ((-7.9895e-12) * (effective_temperature - 5780)**3) + ((-1.8328e-16) * (effective_temperature - 5780)**4)
+        S3 = 0.3438 + (5.8942e-4*(effective_temperature - 5780)) + (1.6558e-9*(effective_temperature - 5780)**2) + ((-3.0045e-12) * (effective_temperature - 5780)**3) + ((-5.2983e-16) * (effective_temperature - 5780)**4)
+        S4 = 0.3179 + (5.4513e-5*(effective_temperature - 5780)) + (1.5313e-9*(effective_temperature - 5780)**2) + ((-2.7786e-12) * (effective_temperature - 5780)**3) + ((-4.8997e-16) * (effective_temperature - 5780)**4)
+        D1 = math.sqrt(self.get_relative_luminosity() / S1)
+        D2 = math.sqrt(self.get_relative_luminosity() / S2)
+        D3 = math.sqrt(self.get_relative_luminosity() / S3)
+        D4 = math.sqrt(self.get_relative_luminosity() / S4)
+        a = self.calculate_semi_major_axis_relative()
+        mu3_1 = D2
+        sigma3_1 = (D2 - D1) / 3
+        mu3_2 = D3
+        sigma3_2 = (D4 - D3) / 3
+        if a < D2:
+            return math.exp(-0.5 * (((a - mu3_1) / sigma3_1) ** 2))
+        elif D2 <= a and a <= D3:
+            return 1
         else:
-            mu = 1.68
-            sigma = (2.4 - 1.68) / 3
-
-            return math.exp(-0.5 * ((hz_distance - mu) / sigma) ** 2)
+            return math.exp(-0.5 * (((a - mu3_2) / sigma3_2) ** 2))   
 
     def calculate_L4(self):
-<<<<<<< HEAD
-        density = self.get_relative_mass() / ((4 / 3 * math.pi) * (self.get_relative_radius ** 3))
-        density = density ** (1/2)
-        mag_radius = self.get_relative_radius() ** (7 / 2)
-        mag_field = density * mag_radius * self.get_angular_frequency()
-        return mag_field
-      
-=======
         density, r, F = 0, 0, 0
         alpha = 1
         sigma4 = 1/3
@@ -121,7 +130,6 @@ class SEPHI:
         magnetic_moment_relative = alpha * math.sqrt(density) * (r ** (10/3)) * math.cbrt(F)
         return math.exp(-0.5 * ((magnetic_moment_relative - 1)/sigma4)**2) if (magnetic_moment_relative < 1) else 1
 
->>>>>>> 69a1d15f9de679ca90a445c4dd38cca4e30d7b7c
     def calculate_sephi(self):
         L1 = self.calculate_L1()
         L2 = self.calculate_L2()
