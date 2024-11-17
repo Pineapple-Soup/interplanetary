@@ -21,16 +21,16 @@ def calculate_sephi():
             print(data)  # Correct way to check keys
             return "Missing required fields", 400
 
-        stellar_effective_temperature = EffectiveTemperature[data["stellar_effective_temperature"].upper()]
+        stellar_effective_temperature = EffectiveTemperature[data["sTemp"].upper()]
         # Instantiate SEPHI with input data
         sephi_instance = SEPHI(
-            planet_mass=data["planet_mass"],  # Accessing keys correctly
-            planet_radius=data["planet_radius"],
-            stellar_mass=data["stellar_mass"],
+            planet_mass=data["pMass"],  # Accessing keys correctly
+            planet_radius=data["pRadius"],
+            stellar_mass=data["sMass"],
             stellar_effective_temperature=stellar_effective_temperature,  # Correctly using enum
-            orbital_period=data["orbital_period"],
-            stellar_luminosity=data["stellar_luminosity"],
-            planet_type=PlanetType[data["planet_type"].upper()],  # Accessing keys correctly
+            orbital_period=data["pPeriod"],
+            stellar_luminosity=data["sLuminosity"],
+            planet_type=PlanetType[data["pType"].upper()],  # Accessing keys correctly
         )
 
         # Calculate SEPHI
