@@ -123,17 +123,3 @@ export const planetParams = [
     //     units: "W/m^2"
     // }
 ]
-
-// dropdowns
-export const planetParams2 = [
-    {
-        id: 1,
-        label: 'Stellar Effective Temperature',
-        options: ["Class F - 7200K", "Class G - 5700K", "Class K - 4800K", "Class M - 3800K"]
-    },
-    {
-        id: 2,
-        label: 'Planet Type',
-        options: ["Rocky", "Ice Giant", "Gas Giant", "Icey"],
-    }
-]
